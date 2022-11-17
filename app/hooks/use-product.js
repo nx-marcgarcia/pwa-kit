@@ -10,6 +10,7 @@ import {useVariant} from './use-variant'
 import {useIntl} from 'react-intl'
 import {useVariationParams} from './use-variation-params'
 import {useVariationAttributes} from './use-variation-attributes'
+import {useCustomAttributes} from './use-custom-attributes'
 
 const OUT_OF_STOCK = 'OUT_OF_STOCK'
 const UNFULFILLABLE = 'UNFULFILLABLE'
@@ -27,6 +28,7 @@ export const useProduct = (product) => {
     const variationParams = useVariationParams(product)
     const variationAttributes = useVariationAttributes(product)
     const [quantity, setQuantity] = useState(initialQuantity)
+    const customAttributes = useCustomAttributes(product)
 
     // A product is considered out of stock if the stock level is 0 or if we have all our
     // variation attributes selected, but don't have a variant. We do this because the API
@@ -72,6 +74,7 @@ export const useProduct = (product) => {
         variationParams,
         setQuantity,
         variant,
-        stockLevel
+        stockLevel,
+        customAttributes
     }
 }

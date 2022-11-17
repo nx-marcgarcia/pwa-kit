@@ -10,7 +10,18 @@ import PropTypes from 'prop-types'
 import {useHistory, useLocation} from 'react-router-dom'
 import {useIntl} from 'react-intl'
 
-import {Flex, Heading, Button, Skeleton, Box, Text, VStack, Fade, useTheme} from '@chakra-ui/react'
+import {
+    Flex,
+    Heading,
+    Button,
+    Skeleton,
+    Box,
+    Text,
+    VStack,
+    Fade,
+    useTheme,
+    HStack
+} from '@chakra-ui/react'
 import {useProduct} from '../../hooks'
 import {useAddToCartModalContext} from '../../hooks/use-add-to-cart-modal'
 
@@ -101,7 +112,8 @@ const ProductView = ({
         variationParams,
         variationAttributes,
         stockLevel,
-        stepQuantity
+        stepQuantity,
+        customAttributes
     } = useProduct(product)
     const canAddToWishlist = !isProductLoading
     const canOrder =
@@ -360,6 +372,17 @@ const ProductView = ({
                                 }}
                             />
                         </VStack>
+                        {customAttributes &&
+                            Object.getOwnPropertyNames(customAttributes).map((val, idx) => {
+                                return (
+                                    <Flex role="radiogroup" key={idx}>
+                                        <HStack>
+                                            <Box fontWeight="semibold">{`${val}:`}</Box>
+                                            <Box>{customAttributes[val]}</Box>
+                                        </HStack>
+                                    </Flex>
+                                )
+                            })}
                         <Box>
                             {!showLoading && showOptionsMessage && (
                                 <Fade in={true}>
