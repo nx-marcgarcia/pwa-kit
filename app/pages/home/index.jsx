@@ -29,6 +29,7 @@ import Hero from '../../components/hero'
 import Seo from '../../components/seo'
 import Section from '../../components/section'
 import ProductScroller from '../../components/product-scroller'
+import ProductTileHome from '../../components/product-tile-home'
 
 // Others
 import {getAssetUrl} from 'pwa-kit-react-sdk/ssr/universal/utils'
@@ -50,7 +51,7 @@ import {
  * The page renders SEO metadata and a few promotion
  * categories and products, data is from local file.
  */
-const Home = ({productSearchResult, isLoading}) => {
+const Home = ({productSearchResult, isLoading, product}) => {
     const intl = useIntl()
     const einstein = useEinstein()
     const {pathname} = useLocation()
@@ -241,6 +242,12 @@ const Home = ({productSearchResult, isLoading}) => {
                 </Container>
             </Section>
 
+            <Section>
+                <Box width={'30%'} margin={'auto'}>
+                    <ProductTileHome product={product} enableFavourite></ProductTileHome>
+                </Box>
+            </Section>
+
             <Section
                 padding={4}
                 paddingTop={32}
@@ -293,6 +300,15 @@ Home.getProps = async ({res, api}) => {
         res.set('Cache-Control', `max-age=${MAX_CACHE_AGE}`)
     }
 
+    let productId = '25697133M'
+
+    let product = await api.shopperProducts.getProduct({
+        parameters: {
+            id: productId,
+            limit: HOME_SHOP_PRODUCTS_LIMIT
+        }
+    })
+
     const productSearchResult = await api.shopperSearch.productSearch({
         parameters: {
             refine: [`cgid=${HOME_SHOP_PRODUCTS_CATEGORY_ID}`, 'htype=master'],
@@ -300,7 +316,7 @@ Home.getProps = async ({res, api}) => {
         }
     })
 
-    return {productSearchResult}
+    return {productSearchResult, product}
 }
 
 Home.propTypes = {
@@ -313,7 +329,11 @@ Home.propTypes = {
      * The current state of `getProps` when running this value is `true`, otherwise it's
      * `false`. (Provided internally)
      */
-    isLoading: PropTypes.bool
+    isLoading: PropTypes.bool,
+    /**
+     * The product object to be shown on the page..
+     */
+    product: PropTypes.object
 }
 
 export default Home
