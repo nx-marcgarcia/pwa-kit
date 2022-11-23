@@ -149,7 +149,7 @@ ProductTileHome.propTypes = {
         }),
         imageGroups: PropTypes.arrayOf(
             PropTypes.shape({
-                images: PropTypes.string
+                images: PropTypes.array
             })
         ),
         price: PropTypes.number,
